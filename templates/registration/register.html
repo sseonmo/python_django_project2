@@ -1,0 +1,18 @@
+{% extends "blogs/_base.html" %}
+
+{% block title %} 회원가입 {% endblock %}
+{% block page %} signup {% endblock %}
+
+{% block content %}
+<div style="padding: 50px 0 0 50px;">
+	<h1>Signup</h1>
+	<hr>
+	<form action="" method="post">
+		<!-- as_p 는 p tag		-->
+		<!-- template tag : form.as_table, form.as_ul	-->
+		{{ user_form.as_p }}
+		{% csrf_token %}
+		<input class="btn btn-primary" type="submit" value="submit">
+	</form>
+</div>
+{% endblock %}

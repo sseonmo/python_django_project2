@@ -41,6 +41,8 @@ INSTALLED_APPS = [
 
 INSTALLED_APPS += [
     'users',
+    'blogs',
+    'helpers',
 ]
 
 
@@ -56,10 +58,13 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'django_project2.urls'
 
+#  template 위치지정 DIR[] 에 정의해야함. - os.path.join(BASE_DIR, 'templates')
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -123,7 +128,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 """
 api.User.groups: (fields.E304) Reverse accessor for 'User.groups' clashes with reverse accessor for 'User.groups'.
 HINT: Add or change a related_name argument to the definition for 'User.groups' or 'User.groups'.
@@ -133,3 +140,7 @@ User 모델을 커스터마이징 했을 때 발생하는 에러.
 settings.py에 다음을 추가해준다.
 """
 AUTH_USER_MODEL = 'users.User'
+
+# 아래 로그인, 로그아웃 변수는 꼭 셋팅해야함
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
