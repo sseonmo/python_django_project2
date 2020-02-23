@@ -1,4 +1,26 @@
-{% for post in posts %}
-    <h1>{{ post.title }}</h1>
-    <p>{{ post.create_at }}</p>
-{% endfor %}
+{% extends "blogs/_base.html" %}
+{% block content %}
+    <div class="container">
+        <div class="row float-right">
+            <form action="{% url 'post_write' %}" method="get">
+                <button type="submit" class="btn btn-danger">글쓰기</button>
+            </form>
+        </div>
+        <div class="row">
+            {% for post in posts %}
+                <div class="col-lg-8 col-md-10 mx-auto">
+                    <div class="post-preview">
+                        <a href="{% url 'post_detail' post.id %}">
+                            <h2 class="post-title">{{ post.title }}</h2>
+                            <h3 class="post-subtitle">{{ post.content }}</h3>
+                        </a>
+                        <p class="post-meta">Posted by
+                            <a href="#"> {{ post.user.email }}</a>
+                            {{ post.created_at }}
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
