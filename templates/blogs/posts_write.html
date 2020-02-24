@@ -1,28 +1,29 @@
 {% extends "blogs/_base.html" %}
 {% block content %}
-    <div class="container">
-        <div class="row-6">
-            <form method="post" action="{% url 'post_write' %}">
-                <div class="form-group">
-                    <label for="title">제목</label>
-                    <input type="text" class="form-control" id="title" aria-describedby="emailHelp">
-                </div>
-                <div class="form-group">
-                    <label for="content">내용</label>
-                    <textarea class="form-control" id="content" rows="3"></textarea>
-                </div>
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="inputGroupFileAddon01">이미지</span>
-                    </div>
-                    <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="image"
-                               aria-describedby="inputGroupFileAddon01">
-                        <label class="custom-file-label" for="inputGroupFile01">이미지 선택</label>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary">저장</button>
-            </form>
-        </div>
-    </div>
+<div class="container">
+	<div class="row-6">
+		<form method="post" action="{% url 'post_write' %}" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="form-group">
+				<label for="title">제목</label>
+				<input type="text" class="form-control" id="title" name="title" placeholder="제목을 입력해주세요.">
+				{% for error in errors %}
+					<small style="color: red;">{{ error.title}}</small>
+				{% endfor%}
+			</div>
+			<div class="form-group">
+				<label for="content">내용</label>
+				<textarea class="form-control" id="content" name="content" rows="3" placeholder="내용을 입력해주세요."></textarea>
+				{% for error in errors %}
+				<small style="color: red;">{{ error.content}}</small>
+				{% endfor%}
+			</div>
+			<div class="form-group">
+				<label for="image">이미지</label>
+				<input type="file" class="form-control-file" id="image" name="image">
+			</div>
+			<button type="submit" class="btn btn-primary">저장</button>
+		</form>
+	</div>
+</div>
 {% endblock %}

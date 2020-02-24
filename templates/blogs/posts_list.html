@@ -2,9 +2,7 @@
 {% block content %}
     <div class="container">
         <div class="row float-right">
-            <form action="{% url 'post_write' %}" method="get">
-                <button type="submit" class="btn btn-danger">글쓰기</button>
-            </form>
+            <a href="{% url 'post_write' %}"  class="btn btn-danger">글쓰기</a>
         </div>
         <div class="row">
             {% for post in posts %}

@@ -144,3 +144,10 @@ AUTH_USER_MODEL = 'users.User'
 # 아래 로그인, 로그아웃 변수는 꼭 셋팅해야함
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+# 파일업로드 관련
+# MEDIA_URL 은 MEDIA_ROOT에 접근할 URL을 뜻한다 - 항상 / 로 끝나도록 설정
+# MEDIA_ROOT 는 파일을 업로드할 장소를 뜻한다면,
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
