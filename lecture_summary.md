@@ -115,7 +115,7 @@ class Post(BaseModel):
 ````
 ### URL Reverse 
 - 참조사이트
-    > https://wayhome25.github.io/django/2017/05/05/django-url-reverse/
+    > https://wayhome25.github.io/django/2017/05/05/django-url-reverse/  
     https://docs.djangoproject.com/en/3.0/ref/urlresolvers/
 > reverse
 ```python

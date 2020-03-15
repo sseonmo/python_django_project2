@@ -11,13 +11,17 @@ class Post(BaseModel):
 	title = models.CharField(max_length=255, blank=False, verbose_name='타이틀')
 	content = models.TextField(verbose_name='내용')
 	image = models.ImageField(blank=True, null=True, verbose_name='이미지', upload_to='%Y/%m/%d')
-	
+	likes = models.ManyToManyField(User, related_name='likes', blank=True)
+
 	# delete 오버라이딩
 	def delete(self, *args, **kargs):
 		os.remove(os.path.join(settings.MEDIA_ROOT, self.image.path))
 		# 원래의 delete 함수를 실행
 		super(Post, self).delete(*args, **kargs)
-	
+
+	def total_likes(self):
+		return self.likes.count()
+
 	def __str__(self):
 		return '%s - %s' % (self.title, self.user.email)
 
