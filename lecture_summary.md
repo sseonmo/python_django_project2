@@ -305,5 +305,81 @@ class Post(BaseModel):
 image = models.ImageField(blank=True, null=True, verbose_name='이미지')
 ...
 ```
+-  pip install django-social-share
+    - 소셜 연동위한 팩키지( 로그인 기능이 없)
+    - 설치 : pip install django-social-share    
+    - 참조 : https://pypi.org/project/django-social-share/
+    - similar : django-social-auth 
+```python
 
+# settings.py
+INSTALLED_APPS = [
+    ...
+    'django_social_share',
+    ...
+]
 
+```
+```html
+<!-- 
+facebook 지원안함
+사용할 page에 load 추가
+post_detail.html
+-->
+{% extends "blogs/_base.html" %}
+{% load social_share %}
+...
+<!-- social 공유 -->
+<div class="row" style="padding-bottom: 10px">
+    <!-- facebook 지원 안함 -->
+    <div class="col-lg-8 col-md-10 mx-auto">
+        <button type="button" class="btn btn-light float-left">
+            {% post_to_facebook post.get_absolute_url "facebook" %}
+        </button>
+        <button type="button" class="btn btn-light float-left">
+            {% post_to_twitter "새로운글:{{ post.title }}. 읽어보세요" post.get_absolute_url "Post to Twitter" %}
+        </button>
+    </div>
+</div>
+```
+- django-taggit
+    - 태그를 활용할 수 있는 package
+    - 설치 :pip install django-taggit 
+    - 참조 : https://django-taggit.readthedocs.io/en/latest/
+```python
+# settings.py
+INSTALLED_APPS = [
+    ...
+    'taggit',
+    ...
+]
+
+# models.py
+from django.db import models
+from helpers.models import BaseModel
+from users.models import User
+from django.conf import settings
+import os
+from taggit.managers import TaggableManager
+
+# Create your models here.
+class Post(BaseModel):
+	user = models.ForeignKey(User, on_delete=models.CASCADE)
+	title = models.CharField(max_length=255, blank=False, verbose_name='타이틀')
+	content = models.TextField(verbose_name='내용')
+	image = models.ImageField(blank=True, null=True, verbose_name='이미지', upload_to='%Y/%m/%d')
+	likes = models.ManyToManyField(User, related_name='likes', blank=True)
+	tags = TaggableManager() # 추가 
+	
+	# 추가후 makemigrations / migrate 하는 걸 잊지말자 
+	...
+
+---
+# post_detail.html
+<div class="col_lg-6 col-md-10 mx-auto">
+    {% for tag in post.tags.all %}
+        <span class="badge badge-dark">#{{ tag.name }}</span>
+    {% endfor %}
+</div>
+
+```

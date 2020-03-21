@@ -1,4 +1,5 @@
 {% extends "blogs/_base.html" %}
+{% load social_share %}
 {% block content %}
     <div class="container">
         <div class="row">
@@ -11,9 +12,31 @@
                 <p>{{ post.content }}</p>
             </div>
         </div>
-        <!-- like button -->
+        <!-- like button
         <div id="like_section" class="row">
             {% include 'blogs/like_section.html' %}
+        </div> -->
+        <!-- social 공유 -->
+        <div class="row" style="padding-bottom: 10px">
+            <div class="col_lg-6 col-md-10 mx-auto">
+                {% for tag in post.tags.all %}
+                    <span class="badge badge-dark">#{{ tag.name }}</span>
+                {% endfor %}
+            </div>
+            <!-- facebook 지원 안함 -->
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <button type="button" class="btn btn-light float-left">
+                    {% post_to_facebook post.get_absolute_url "facebook" %}
+                </button>
+                <button type="button" class="btn btn-light float-left">
+                    {% post_to_twitter "새로운글:{{ post.title }}" post.get_absolute_url "Post to Twitter" %}
+                </button>
+                <button type="button" class="btn btn-light float-left">
+{#                    {% send_email  object.title "새로운글:{{ post.title }}" post.get_absolute_url "Share Email" %}#}
+                    {% send_email object.title "New Song: {{post.title}}. Check it out!" object_or_url "Share via email" %}
+                </button>
+
+            </div>
         </div>
     </div>
 <!-- 댓글목록 -->
