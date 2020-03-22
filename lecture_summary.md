@@ -383,3 +383,60 @@ class Post(BaseModel):
 </div>
 
 ```
+
+# 배포하기전 체크해야하는것들
+- manage.py check --deploy
+```editorconfig
+python manage.py check --deploy 
+System check identified some issues:
+
+WARNINGS:
+?: (security.W004) You have not set a value for the SECURE_HSTS_SECONDS setting. If your entire site is served only over SSL, you may want to consider setting a value and enabling HTTP Strict Transport Security. Be sure to read the documentation first; enabling HSTS carelessly can cause serious, irreversible problems.
+?: (security.W008) Your SECURE_SSL_REDIRECT setting is not set to True. Unless your site should be available over both SSL and non-SSL connections, you may want to either set this setting True or configure a load balancer or reverse-proxy server to redirect all connections to HTTPS.
+?: (security.W012) SESSION_COOKIE_SECURE is not set to True. Using a secure-only session cookie makes it more difficult for network traffic sniffers to hijack user sessions.
+?: (security.W016) You have 'django.middleware.csrf.CsrfViewMiddleware' in your MIDDLEWARE, but you have not set CSRF_COOKIE_SECURE to True. Using a secure-only CSRF cookie makes it more difficult for network traffic sniffers to steal the CSRF token.
+?: (security.W018) You should not have DEBUG set to True in deployment.
+?: (security.W020) ALLOWED_HOSTS must not be empty in deployment.
+?: (security.W022) You have not set the SECURE_REFERRER_POLICY setting. Without this, your site will not send a Referrer-Policy header. You should consider enabling this header to protect user privacy.
+
+```
+- SECRET_KEY 분리하기(공개X)
+    - 환경변수 이용하기
+    - 파일로 일기(실습)
+    - SECRET KEY 발급 site(django 규격에 맞게 키발급)
+        - https://www.miniwebtool.com/django-secret-key-generator/
+```python
+"""
+1. site에서 secret kye 발급 
+2. 발급받은 secret key로 파일생성( manage.py 와 동일한 위치) 
+3. settings.py 에서 파일을 읽어 secret key 를 읽어올수 있게 설정
+""" 
+# secrets.json
+{
+  "SECRET_KEY" : "e4w1lk2@uj&f8x2^tnqu=z-7sp02z^%7)rjy0lwpk*3*uvw7_7"
+}
+
+--- 
+# settings.py
+...
+
+import json
+from django.core.exceptions import ImproperlyConfigured
+secret_key = os.path.join(BASE_DIR, 'secrets.json')
+
+with open(secret_key) as f:
+	secrets = json.loads(f.read())
+
+def get_secret(setting, secrets=secrets):
+	try:
+		# print(secrets[setting])
+		return secrets[setting]
+	except KeyError:
+		error_msg = "Set the {0} environment variable".format(setting)
+		raise ImproperlyConfigured(error_msg)
+
+SECRET_KEY = get_secret("SECRET_KEY")
+
+...
+
+```

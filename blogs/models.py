@@ -3,7 +3,7 @@ from helpers.models import BaseModel
 from users.models import User
 from django.conf import settings
 import os
-
+from taggit.managers import TaggableManager
 
 # Create your models here.
 class Post(BaseModel):
@@ -12,6 +12,7 @@ class Post(BaseModel):
 	content = models.TextField(verbose_name='내용')
 	image = models.ImageField(blank=True, null=True, verbose_name='이미지', upload_to='%Y/%m/%d')
 	likes = models.ManyToManyField(User, related_name='likes', blank=True)
+	tags = TaggableManager()
 
 	# delete 오버라이딩
 	def delete(self, *args, **kargs):
